@@ -114,7 +114,7 @@ public class PlayBlock : MonoBehaviour
         enabled = false;
 
         if(!CheckValidMove()){
-            //Unisti kocku
+            //Unisti kocku test
             Debug.Log("Destroyeeeed");
             Destroy(this);
         }
