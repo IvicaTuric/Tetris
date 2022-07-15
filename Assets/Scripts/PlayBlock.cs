@@ -7,6 +7,7 @@ public class PlayBlock : MonoBehaviour
     public static int resizeScale = 1;
     float prevTime;
     float fallTime = 1f;
+    bool grabbed = false;
     void Start()
     {
 
@@ -22,23 +23,24 @@ public class PlayBlock : MonoBehaviour
     void Update()
     {
         // Fall every 1s
-        if (Time.time - prevTime > fallTime)
+        if (Time.time - prevTime > fallTime && !grabbed)
         {
             transform.position += Vector3.down;
             prevTime = Time.time;
-
-            if (!CheckValidFall())
+            try
             {
-                transform.position += Vector3.up;
-                GetComponent<Rigidbody>().detectCollisions = false;
-                enabled = false;
+                if (!CheckValidFall())
+                {
+                    transform.position += Vector3.up;
+                    MoveToValidPos();
+                    GetComponent<Rigidbody>().detectCollisions = false;
+                    EndMove();
+                }
             }
-            else if (CheckValidMove())
+            catch
             {
-                Playgrid.instance.UpdateGrid(this);
-                //Update
+                Destroy(gameObject);
             }
-
         }
 
     }
@@ -54,8 +56,8 @@ public class PlayBlock : MonoBehaviour
                 return false;
             };
         }
-        
-        //Stops fall if encounters anouter block
+
+        //Stops fall if encounters another block
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
@@ -73,7 +75,8 @@ public class PlayBlock : MonoBehaviour
         return true;
     }
 
-    bool CheckValidMove(){
+    bool CheckValidMove()
+    {
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
@@ -87,42 +90,69 @@ public class PlayBlock : MonoBehaviour
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
             Transform t = Playgrid.instance.GetTransformOnGridPos(pos);
+
             // Cube position in grid not empty and taken by cube of different block
             if (t != null && t.parent != transform)
             {
                 return false;
             }
-            else
+
+            // Cube is at lowest level or there is a cube from different block below
+            if (pos.y != 0)
             {
-                return true;
+                Vector3 posBelow = new Vector3(pos.x, pos.y - 1, pos.z);
+                Transform t2 = Playgrid.instance.GetTransformOnGridPos(posBelow);
+                if (t2 != null && t2.parent != transform)
+                {
+                    return true;
+                }
             }
+            else return true;
         }
-        return true;
+        return false;
     }
 
     public void ReleaseBlock()
     {
-        
+        grabbed = false;
+        MoveToValidPos();
+
+        EndMove();
+
+
+    }
+
+    public void GrabBlock()
+    {
+        grabbed = true;
+        GetComponent<Rigidbody>().detectCollisions = false;
+    }
+
+    public void MoveToValidPos()
+    {
         Vector3 rot = Playgrid.instance.RoundRotation(transform.eulerAngles);
-        transform.eulerAngles=rot;
+        transform.eulerAngles = rot;
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
-            child.position=pos;
+            child.position = pos;
         }
-        GetComponent<Rigidbody>().detectCollisions = false; //Stavi na primanje?
         enabled = false;
+    }
 
-        if(!CheckValidMove()){
-            //Unisti kocku test
-            Debug.Log("Destroyeeeed");
-            Destroy(this);
+    public void EndMove()
+    {
+        if (!CheckValidMove())
+        {
+            //Destroy block because out of grid or inside other block
+            Destroy(gameObject);
+            //Dodaj zvuk / animaciju?
         }
-        else{
+        else
+        {
             Playgrid.instance.UpdateGrid(this);
             //
         }
     }
-
 
 }
