@@ -17,7 +17,7 @@ public class Playgrid : MonoBehaviour
     public GameObject[] blockList;
     [Header("Playfield visuals")]
     public GameObject bottomPlane;
-    public GameObject  front, back, left, right;
+    public GameObject front, back, left, right;
     [Header("Materials")]
     public Material[] materialList;
 
@@ -61,10 +61,6 @@ public class Playgrid : MonoBehaviour
                 (int)vec.z >= 0 && (int)vec.z < gridSizeZ);
     }
 
-    public bool CheckFallLevel(Vector3 vec){
-        return ((int)vec.y >= 6);
-    }
-
     public void UpdateGrid(PlayBlock block)
     {
         for (int x = 0; x < gridSizeX; x++)
@@ -92,6 +88,19 @@ public class Playgrid : MonoBehaviour
                 theGrid[(int)pos.x, (int)pos.y, (int)pos.z] = child;
             }
         }
+
+    string row = "";
+    for (int x = 0; x < gridSizeX; x++)
+    {
+        for (int z = 0; z < gridSizeZ; z++)
+        {
+            if (theGrid[x, 0, z] != null) row += "x";
+            else row += "_";
+        }
+        row += "\n";
+    }
+    Debug.Log(row);
+
     }
 
     public Transform GetTransformOnGridPos(Vector3 pos)
@@ -108,15 +117,15 @@ public class Playgrid : MonoBehaviour
 
     public void SpawnNewBlock()
     {
-        Vector3 spawnPoint = new Vector3(Random.Range(0, 4), 15, Random.Range(0, 4));
+        Vector3 spawnPoint = new Vector3(2, 15, 2);
         int randomPoint = Random.Range(0, blockList.Length);
 
         //Spwan
         GameObject newBlock = Instantiate(blockList[randomPoint], spawnPoint, Quaternion.identity) as GameObject;
-        int randomMaterial=Random.Range(0, materialList.Length);
+        int randomMaterial = Random.Range(0, materialList.Length);
         foreach (Transform child in newBlock.transform)
         {
-            child.GetComponent<Renderer>().material=materialList[randomMaterial];
+            child.GetComponent<Renderer>().material = materialList[randomMaterial];
         }
     }
 

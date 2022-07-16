@@ -6,11 +6,11 @@ public class PlayBlock : MonoBehaviour
 {
     public static int resizeScale = 1;
     float prevTime;
-    float fallTime = 1f;
+    float fallTime = 0.8f;
     bool grabbed = false;
     void Start()
     {
-
+        MoveToValidPos();
     }
 
     void OnDrawGizmos()
@@ -27,19 +27,11 @@ public class PlayBlock : MonoBehaviour
         {
             transform.position += Vector3.down;
             prevTime = Time.time;
-            try
+            if (!CheckValidFall())
             {
-                if (!CheckValidFall())
-                {
-                    transform.position += Vector3.up;
-                    MoveToValidPos();
-                    GetComponent<Rigidbody>().detectCollisions = false;
-                    EndMove();
-                }
-            }
-            catch
-            {
-                Destroy(gameObject);
+                transform.position += Vector3.up;
+                GetComponent<Rigidbody>().detectCollisions = false;
+                EndMove();
             }
         }
 
@@ -47,20 +39,12 @@ public class PlayBlock : MonoBehaviour
 
     bool CheckValidFall()
     {
-        //Check if above 6lvl for each cube in block
-        foreach (Transform child in transform)
-        {
-            Vector3 pos = Playgrid.instance.RoundPosition(child.position);
-            if (!Playgrid.instance.CheckFallLevel(pos))
-            {
-                return false;
-            };
-        }
 
         //Stops fall if encounters another block
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
+            if( pos.y==-1) return false;
             Transform t = Playgrid.instance.GetTransformOnGridPos(pos);
             // Cube position in grid not empty and taken by cube of different block
             if (t != null && t.parent != transform)
@@ -77,6 +61,7 @@ public class PlayBlock : MonoBehaviour
 
     bool CheckValidMove()
     {
+        // Check inside grid
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
@@ -86,18 +71,23 @@ public class PlayBlock : MonoBehaviour
             };
         }
 
+        
+        // Cube position in grid not empty and taken by cube of different block
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
             Transform t = Playgrid.instance.GetTransformOnGridPos(pos);
 
-            // Cube position in grid not empty and taken by cube of different block
             if (t != null && t.parent != transform)
             {
                 return false;
             }
-
-            // Cube is at lowest level or there is a cube from different block below
+        }
+        
+        // Cube is at lowest level or there is a cube from different block below
+        foreach (Transform child in transform)
+        {
+            Vector3 pos = Playgrid.instance.RoundPosition(child.position);
             if (pos.y != 0)
             {
                 Vector3 posBelow = new Vector3(pos.x, pos.y - 1, pos.z);
@@ -112,20 +102,16 @@ public class PlayBlock : MonoBehaviour
         return false;
     }
 
-    public void ReleaseBlock()
-    {
-        grabbed = false;
-        MoveToValidPos();
-
-        EndMove();
-
-
-    }
-
     public void GrabBlock()
     {
         grabbed = true;
         GetComponent<Rigidbody>().detectCollisions = false;
+    }
+
+    public void ReleaseBlock()
+    {
+        MoveToValidPos();
+        EndMove();
     }
 
     public void MoveToValidPos()
@@ -137,15 +123,15 @@ public class PlayBlock : MonoBehaviour
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
             child.position = pos;
         }
-        enabled = false;
     }
 
     public void EndMove()
     {
+        enabled = false;
         if (!CheckValidMove())
         {
             //Destroy block because out of grid or inside other block
-            Destroy(gameObject);
+            DestroyBlock();
             //Dodaj zvuk / animaciju?
         }
         else
@@ -155,4 +141,25 @@ public class PlayBlock : MonoBehaviour
         }
     }
 
+    public void DestroyBlock(){
+        foreach (Transform child in transform){
+            StartCoroutine(Blink(child));
+        }
+        Destroy(gameObject, 0.8f);
+    }
+
+    IEnumerator Blink(Transform obj)
+    {
+        Renderer objRenderer = obj.GetComponent<Renderer>();
+        objRenderer.enabled = true;
+        yield return new WaitForSeconds(0.2f);
+
+        for (int i = 0; i < 3; i++)
+        {
+            objRenderer.enabled = false;
+            yield return new WaitForSeconds(0.1f);
+            objRenderer.enabled = true;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 }
