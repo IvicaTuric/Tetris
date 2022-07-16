@@ -23,6 +23,7 @@ public class Playgrid : MonoBehaviour
 
     public Transform[,,] theGrid;
 
+    public static List<GameObject> allBlocks = new List<GameObject>();
     void Awake()
     {
         instance = this;
@@ -89,18 +90,23 @@ public class Playgrid : MonoBehaviour
             }
         }
 
-    string row = "";
-    for (int x = 0; x < gridSizeX; x++)
-    {
-        for (int z = 0; z < gridSizeZ; z++)
-        {
-            if (theGrid[x, 0, z] != null) row += "x";
-            else row += "_";
-        }
-        row += "\n";
-    }
-    Debug.Log(row);
+        //PrintGrid();
 
+    }
+
+    public void PrintGrid()
+    {
+        string row = "";
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                if (theGrid[x, 0, z] != null) row += "x";
+                else row += "_";
+            }
+            row += "\n";
+        }
+        Debug.Log(row);
     }
 
     public Transform GetTransformOnGridPos(Vector3 pos)
@@ -126,6 +132,15 @@ public class Playgrid : MonoBehaviour
         foreach (Transform child in newBlock.transform)
         {
             child.GetComponent<Renderer>().material = materialList[randomMaterial];
+        }
+        allBlocks.Add(newBlock);
+    }
+
+    static public void RestartGrid()
+    {
+        foreach (GameObject block in allBlocks)
+        {
+            Destroy(block);
         }
     }
 
