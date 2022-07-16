@@ -145,6 +145,7 @@ public class PlayBlock : MonoBehaviour
         foreach (Transform child in transform){
             StartCoroutine(Blink(child));
         }
+        Playgrid.blockFailureSound();
         Destroy(gameObject, 0.8f);
     }
 

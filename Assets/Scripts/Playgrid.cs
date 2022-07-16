@@ -9,7 +9,10 @@ public class Playgrid : MonoBehaviour
     public int gridSizeX, gridSizeY, gridSizeZ;
     public static int resizeScale = 10;
     public static int moveScale = resizeScale / 5;
-
+    public static int lastRandomPoint=0;
+    public static int lastRandomColor=0;
+    public static int numberOfBlocks=0;
+    public static AudioSource failureSound;
     float prevTime;
     float spawnTime = 4f;
 
@@ -32,6 +35,8 @@ public class Playgrid : MonoBehaviour
     void Start()
     {
         theGrid = new Transform[gridSizeX, gridSizeY, gridSizeZ];
+        numberOfBlocks=blockList.Length;
+        failureSound = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -124,11 +129,19 @@ public class Playgrid : MonoBehaviour
     public void SpawnNewBlock()
     {
         Vector3 spawnPoint = new Vector3(2, 15, 2);
-        int randomPoint = Random.Range(0, blockList.Length);
+        int randomPoint = Random.Range(0, numberOfBlocks);
+        
+        // No 2 random in a row
+        if (lastRandomPoint==randomPoint) randomPoint=(randomPoint+1)%numberOfBlocks;
+        lastRandomPoint= randomPoint;
 
         //Spwan
         GameObject newBlock = Instantiate(blockList[randomPoint], spawnPoint, Quaternion.identity) as GameObject;
         int randomMaterial = Random.Range(0, materialList.Length);
+        
+        // No 2 random in a row
+        if (lastRandomColor==randomMaterial) randomMaterial=(randomMaterial+1)%numberOfBlocks;
+        lastRandomColor= randomMaterial;
         foreach (Transform child in newBlock.transform)
         {
             child.GetComponent<Renderer>().material = materialList[randomMaterial];
@@ -142,6 +155,10 @@ public class Playgrid : MonoBehaviour
         {
             Destroy(block);
         }
+    }
+
+    static public void blockFailureSound(){
+        failureSound.Play();
     }
 
     void OnDrawGizmos()
