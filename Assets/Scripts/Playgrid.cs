@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Playgrid : MonoBehaviour
 {
@@ -9,9 +10,10 @@ public class Playgrid : MonoBehaviour
     public int gridSizeX, gridSizeY, gridSizeZ;
     public static int resizeScale = 10;
     public static int moveScale = resizeScale / 5;
-    public static int lastRandomPoint=0;
-    public static int lastRandomColor=0;
-    public static int numberOfBlocks=0;
+    public static int lastRandomPoint = 0;
+    public static int lastRandomColor = 0;
+    public static int numberOfBlocks = 0;
+    public static int score = 0;
     public static AudioSource failureSound;
     float prevTime;
     float spawnTime = 4f;
@@ -24,6 +26,9 @@ public class Playgrid : MonoBehaviour
     [Header("Materials")]
     public Material[] materialList;
 
+    [Header("Score")]
+    public GameObject scoreText;
+
     public Transform[,,] theGrid;
 
     public static List<GameObject> allBlocks = new List<GameObject>();
@@ -35,7 +40,7 @@ public class Playgrid : MonoBehaviour
     void Start()
     {
         theGrid = new Transform[gridSizeX, gridSizeY, gridSizeZ];
-        numberOfBlocks=blockList.Length;
+        numberOfBlocks = blockList.Length;
         failureSound = GetComponent<AudioSource>();
     }
 
@@ -130,18 +135,18 @@ public class Playgrid : MonoBehaviour
     {
         Vector3 spawnPoint = new Vector3(2, 15, 2);
         int randomPoint = Random.Range(0, numberOfBlocks);
-        
+
         // No 2 random in a row
-        if (lastRandomPoint==randomPoint) randomPoint=(randomPoint+1)%numberOfBlocks;
-        lastRandomPoint= randomPoint;
+        if (lastRandomPoint == randomPoint) randomPoint = (randomPoint + 1) % numberOfBlocks;
+        lastRandomPoint = randomPoint;
 
         //Spwan
         GameObject newBlock = Instantiate(blockList[randomPoint], spawnPoint, Quaternion.identity) as GameObject;
         int randomMaterial = Random.Range(0, materialList.Length);
-        
+
         // No 2 random in a row
-        if (lastRandomColor==randomMaterial) randomMaterial=(randomMaterial+1)%numberOfBlocks;
-        lastRandomColor= randomMaterial;
+        if (lastRandomColor == randomMaterial) randomMaterial = (randomMaterial + 1) % numberOfBlocks;
+        lastRandomColor = randomMaterial;
         foreach (Transform child in newBlock.transform)
         {
             child.GetComponent<Renderer>().material = materialList[randomMaterial];
@@ -157,8 +162,78 @@ public class Playgrid : MonoBehaviour
         }
     }
 
-    static public void blockFailureSound(){
+    static public void blockFailureSound()
+    {
         failureSound.Play();
+    }
+
+    public void CheckLayer()
+    {
+        for (int y = gridSizeY-1; y >= 0; y--)
+        {
+            //Check full layer
+            if (CheckFullLayer(y))
+            {
+                //Delete blocks
+                DeleteLayer(y);
+                // Move all down by 1
+                MoveAllLayerDown(y);
+                // Add score ++
+                score += 100;
+                scoreText.GetComponent<TextMeshPro>().text = "Score: " + score;
+            }
+        }
+    }
+
+    bool CheckFullLayer(int y)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                if (theGrid[x, y, z] == null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    void DeleteLayer(int y)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                Destroy(theGrid[x, y, z].gameObject);
+                theGrid[x, y, z] = null;
+            }
+        }
+    }
+
+    void MoveAllLayerDown(int y)
+    {
+        for (int i = y; i < gridSizeY; i++)
+        {
+            MoveOneLayerDown(i);
+        }
+    }
+
+    void MoveOneLayerDown(int y)
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int z = 0; z < gridSizeZ; z++)
+            {
+                if (theGrid[x, y, z] != null)
+                {
+                    theGrid[x,y-1,z]=theGrid[x,y,z];
+                    theGrid[x,y,z]=null;
+                    theGrid[x,y-1,z].position += Vector3.down;
+                }
+            }
+        }
     }
 
     void OnDrawGizmos()

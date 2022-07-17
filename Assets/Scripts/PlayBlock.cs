@@ -138,11 +138,13 @@ public class PlayBlock : MonoBehaviour
         {
             Playgrid.instance.UpdateGrid(this);
             //
+            Playgrid.instance.CheckLayer();
         }
     }
 
     public void DestroyBlock(){
         foreach (Transform child in transform){
+            child.GetComponent<Renderer>().material.EnableKeyword("__EMISSION");
             StartCoroutine(Blink(child));
         }
         Playgrid.blockFailureSound();
