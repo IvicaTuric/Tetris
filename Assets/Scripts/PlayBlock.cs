@@ -6,7 +6,7 @@ public class PlayBlock : MonoBehaviour
 {
     public static int resizeScale = 1;
     float prevTime;
-    float fallTime = 0.8f;
+    public static float fallTime = 0.8f;
     bool grabbed = false;
     void Start()
     {
@@ -148,6 +148,7 @@ public class PlayBlock : MonoBehaviour
             StartCoroutine(Blink(child));
         }
         Playgrid.blockFailureSound();
+        Playgrid.instance.addScore(-50);
         Destroy(gameObject, 0.8f);
     }
 

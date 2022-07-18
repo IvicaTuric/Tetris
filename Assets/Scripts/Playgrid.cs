@@ -169,6 +169,7 @@ public class Playgrid : MonoBehaviour
 
     public void CheckLayer()
     {
+        int scoreBonus=0;
         for (int y = gridSizeY-1; y >= 0; y--)
         {
             //Check full layer
@@ -178,11 +179,35 @@ public class Playgrid : MonoBehaviour
                 DeleteLayer(y);
                 // Move all down by 1
                 MoveAllLayerDown(y);
-                // Add score ++
-                score += 100;
-                scoreText.GetComponent<TextMeshPro>().text = "Score: " + score;
+                // Add score ++, extra if more than 1 row at once
+                addScore(100 + scoreBonus);
+                scoreBonus+=25;
+                switch (score)
+                {
+                    case >4000:
+                        spawnTime=2.0f;
+                        PlayBlock.fallTime=0.4f;
+                    break;
+                    case >3000:
+                        spawnTime=2.5f;
+                        PlayBlock.fallTime=0.5f;
+                    break;
+                    case >2000:
+                        spawnTime=3.0f;
+                        PlayBlock.fallTime=0.6f;
+                    break;
+                    case >500:
+                        spawnTime=3.5f;
+                        PlayBlock.fallTime=0.7f;
+                    break;
+                }
             }
         }
+    }
+
+    public void addScore(int newScore){
+        score+=newScore;
+        scoreText.GetComponent<TextMeshPro>().text = "Score: " + score;
     }
 
     bool CheckFullLayer(int y)
