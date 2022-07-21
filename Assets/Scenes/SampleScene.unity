@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -615,7 +615,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 025bded4184c2e844b22551dcf71e67b, type: 3}
+  m_audioClip: {fileID: 8300000, guid: c37f27a741c2fbd4da1d967dcc091cb3, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.25
   m_Pitch: 1
@@ -709,7 +709,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 768217383}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 10, z: 10}
+  m_LocalPosition: {x: 2.5, y: 2.5, z: 2.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -946,13 +946,13 @@ MonoBehaviour:
   right: {fileID: 1241832030}
   materialList:
   - {fileID: 2100000, guid: cba6d297f51a90d46b231deea8c75085, type: 2}
-  - {fileID: 2100000, guid: bd966d78495a8934cadd38bf6c4c85fa, type: 2}
   - {fileID: 2100000, guid: 7d05f100da21c5e4299869d2173ce18c, type: 2}
   - {fileID: 2100000, guid: 2218ae2422dd15f4082d9eca8e2a2574, type: 2}
-  - {fileID: 2100000, guid: 7a260d63d08dca04b87df06bf9994308, type: 2}
-  - {fileID: 2100000, guid: 812ef97dbf753bc409897ae14f717179, type: 2}
   - {fileID: 2100000, guid: 10a9f2608c3d6e249b91b2c6ec8a24ca, type: 2}
+  - {fileID: 2100000, guid: 812ef97dbf753bc409897ae14f717179, type: 2}
   scoreText: {fileID: 1988924374}
+  failure: {fileID: 8300000, guid: 750e93a89028e934a8b14386daf5ef02, type: 3}
+  success: {fileID: 8300000, guid: 750e93a89028e934a8b14386daf5ef02, type: 3}
 --- !u!82 &1079347096
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1774,7 +1774,7 @@ GameObject:
   - component: {fileID: 1473698253}
   - component: {fileID: 1473698252}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Background Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2498,15 +2498,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Score: 0'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2ce3830021e8c0448b1cc7916d291e94, type: 2}
+  m_sharedMaterial: {fileID: -2908344847986168202, guid: 2ce3830021e8c0448b1cc7916d291e94, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4286205381
+  m_fontColor: {r: 0.77254903, g: 0.3019608, b: 0.47843137, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2523,17 +2523,17 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 25
+  m_fontSizeBase: 25
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
-  m_HorizontalAlignment: 1
+  m_fontStyle: 0
+  m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
-  m_characterSpacing: 0
+  m_characterSpacing: 15
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -2588,7 +2588,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e73a58f6e2794ae7b1b7e50b7fb811b0, type: 2}
+  - {fileID: -2908344847986168202, guid: 2ce3830021e8c0448b1cc7916d291e94, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2627,7 +2627,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.5, y: 9.5}
+  m_AnchoredPosition: {x: 2.5, y: 10}
   m_SizeDelta: {x: 20, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2095610075

@@ -13,8 +13,9 @@ public class Playgrid : MonoBehaviour
     public static int lastRandomPoint = 0;
     public static int lastRandomColor = 0;
     public static int numberOfBlocks = 0;
+    public static int numberOfMaterials = 0;
     public static int score = 0;
-    public static AudioSource failureSound;
+    public static AudioSource audioSource;
     float prevTime;
     float spawnTime = 4f;
 
@@ -29,6 +30,10 @@ public class Playgrid : MonoBehaviour
     [Header("Score")]
     public GameObject scoreText;
 
+    [Header("Audio")]
+    public AudioClip failure;
+    public AudioClip success;
+
     public Transform[,,] theGrid;
 
     public static List<GameObject> allBlocks = new List<GameObject>();
@@ -41,7 +46,8 @@ public class Playgrid : MonoBehaviour
     {
         theGrid = new Transform[gridSizeX, gridSizeY, gridSizeZ];
         numberOfBlocks = blockList.Length;
-        failureSound = GetComponent<AudioSource>();
+        numberOfMaterials = materialList.Length;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -142,10 +148,9 @@ public class Playgrid : MonoBehaviour
 
         //Spwan
         GameObject newBlock = Instantiate(blockList[randomPoint], spawnPoint, Quaternion.identity) as GameObject;
-        int randomMaterial = Random.Range(0, materialList.Length);
-
+        int randomMaterial = Random.Range(0, numberOfMaterials);
         // No 2 random in a row
-        if (lastRandomColor == randomMaterial) randomMaterial = (randomMaterial + 1) % numberOfBlocks;
+        if (lastRandomColor == randomMaterial) randomMaterial = (randomMaterial + 1) % numberOfMaterials;
         lastRandomColor = randomMaterial;
         foreach (Transform child in newBlock.transform)
         {
@@ -162,15 +167,15 @@ public class Playgrid : MonoBehaviour
         }
     }
 
-    static public void blockFailureSound()
+    public void blockFailureSound()
     {
-        failureSound.Play();
+        audioSource.PlayOneShot(this.failure);
     }
 
     public void CheckLayer()
     {
-        int scoreBonus=0;
-        for (int y = gridSizeY-1; y >= 0; y--)
+        int scoreBonus = 0;
+        for (int y = gridSizeY - 1; y >= 0; y--)
         {
             //Check full layer
             if (CheckFullLayer(y))
@@ -181,32 +186,37 @@ public class Playgrid : MonoBehaviour
                 MoveAllLayerDown(y);
                 // Add score ++, extra if more than 1 row at once
                 addScore(100 + scoreBonus);
-                scoreBonus+=25;
+                scoreBonus += 25;
                 switch (score)
                 {
-                    case >4000:
-                        spawnTime=2.0f;
-                        PlayBlock.fallTime=0.4f;
-                    break;
-                    case >3000:
-                        spawnTime=2.5f;
-                        PlayBlock.fallTime=0.5f;
-                    break;
-                    case >2000:
-                        spawnTime=3.0f;
-                        PlayBlock.fallTime=0.6f;
-                    break;
-                    case >500:
-                        spawnTime=3.5f;
-                        PlayBlock.fallTime=0.7f;
-                    break;
+                    case > 1500:
+                        spawnTime = 1.5f;
+                        PlayBlock.fallTime = 0.3f;
+                        break;
+                    case > 1200:
+                        spawnTime = 2.0f;
+                        PlayBlock.fallTime = 0.4f;
+                        break;
+                    case > 900:
+                        spawnTime = 2.5f;
+                        PlayBlock.fallTime = 0.5f;
+                        break;
+                    case > 600:
+                        spawnTime = 3.0f;
+                        PlayBlock.fallTime = 0.6f;
+                        break;
+                    case > 300:
+                        spawnTime = 3.5f;
+                        PlayBlock.fallTime = 0.7f;
+                        break;
                 }
             }
         }
     }
 
-    public void addScore(int newScore){
-        score+=newScore;
+    public void addScore(int newScore)
+    {
+        score += newScore;
         scoreText.GetComponent<TextMeshPro>().text = "Score: " + score;
     }
 
@@ -253,9 +263,9 @@ public class Playgrid : MonoBehaviour
             {
                 if (theGrid[x, y, z] != null)
                 {
-                    theGrid[x,y-1,z]=theGrid[x,y,z];
-                    theGrid[x,y,z]=null;
-                    theGrid[x,y-1,z].position += Vector3.down;
+                    theGrid[x, y - 1, z] = theGrid[x, y, z];
+                    theGrid[x, y, z] = null;
+                    theGrid[x, y - 1, z].position += Vector3.down;
                 }
             }
         }

@@ -44,7 +44,7 @@ public class PlayBlock : MonoBehaviour
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
-            if( pos.y==-1) return false;
+            if (pos.y == -1) return false;
             Transform t = Playgrid.instance.GetTransformOnGridPos(pos);
             // Cube position in grid not empty and taken by cube of different block
             if (t != null && t.parent != transform)
@@ -65,13 +65,17 @@ public class PlayBlock : MonoBehaviour
         foreach (Transform child in transform)
         {
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
+            if (pos.y >= Playgrid.instance.gridSizeY)
+            {
+                //GAME OVER
+            }
             if (!Playgrid.instance.CheckInsideGrid(pos))
             {
                 return false;
             };
         }
 
-        
+
         // Cube position in grid not empty and taken by cube of different block
         foreach (Transform child in transform)
         {
@@ -83,7 +87,7 @@ public class PlayBlock : MonoBehaviour
                 return false;
             }
         }
-        
+
         // Cube is at lowest level or there is a cube from different block below
         foreach (Transform child in transform)
         {
@@ -142,12 +146,14 @@ public class PlayBlock : MonoBehaviour
         }
     }
 
-    public void DestroyBlock(){
-        foreach (Transform child in transform){
+    public void DestroyBlock()
+    {
+        foreach (Transform child in transform)
+        {
             child.GetComponent<Renderer>().material.EnableKeyword("__EMISSION");
             StartCoroutine(Blink(child));
         }
-        Playgrid.blockFailureSound();
+        Playgrid.instance.blockFailureSound();
         Playgrid.instance.addScore(-50);
         Destroy(gameObject, 0.8f);
     }
