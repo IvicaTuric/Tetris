@@ -16,8 +16,8 @@ public class Playgrid : MonoBehaviour
     public static int numberOfMaterials = 0;
     public static int score = 0;
     public static AudioSource audioSource;
-    float prevTime;
-    float spawnTime = 4f;
+    public static float prevTime;
+    public static float spawnTime = 4f;
 
     [Header("Blocks")]
     public GameObject[] blockList;
@@ -172,6 +172,11 @@ public class Playgrid : MonoBehaviour
         audioSource.PlayOneShot(this.failure);
     }
 
+    public void blockSuccessSound()
+    {
+        audioSource.PlayOneShot(this.success);
+    }
+
     public void CheckLayer()
     {
         int scoreBonus = 0;
@@ -184,6 +189,7 @@ public class Playgrid : MonoBehaviour
                 DeleteLayer(y);
                 // Move all down by 1
                 MoveAllLayerDown(y);
+                blockSuccessSound();
                 // Add score ++, extra if more than 1 row at once
                 addScore(100 + scoreBonus);
                 scoreBonus += 25;

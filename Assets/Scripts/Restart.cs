@@ -21,5 +21,7 @@ public class Restart : MonoBehaviour
         Playgrid.RestartGrid();
         Playgrid.score = 0;
         Playgrid.instance.addScore(0);
+        Playgrid.spawnTime = 4.0f;
+        PlayBlock.fallTime = 0.8f;
     }
 }

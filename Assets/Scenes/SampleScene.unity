@@ -523,13 +523,13 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 1.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -952,7 +952,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 812ef97dbf753bc409897ae14f717179, type: 2}
   scoreText: {fileID: 1988924374}
   failure: {fileID: 8300000, guid: 750e93a89028e934a8b14386daf5ef02, type: 3}
-  success: {fileID: 8300000, guid: 750e93a89028e934a8b14386daf5ef02, type: 3}
+  success: {fileID: 8300000, guid: 8f0cffacd063bbc4faecad2172bd44d8, type: 3}
 --- !u!82 &1079347096
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1297,7 +1297,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1086636971}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5, y: 5, z: -2}
+  m_LocalPosition: {x: 6.5, y: 5, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2498,8 +2498,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Score: 0'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2ce3830021e8c0448b1cc7916d291e94, type: 2}
-  m_sharedMaterial: {fileID: -2908344847986168202, guid: 2ce3830021e8c0448b1cc7916d291e94, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 6b1c0866fb02af045be6a0e935a4c34f, type: 2}
+  m_sharedMaterial: {fileID: 4024576638288628840, guid: 6b1c0866fb02af045be6a0e935a4c34f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2523,13 +2523,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 2
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -2588,7 +2588,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2908344847986168202, guid: 2ce3830021e8c0448b1cc7916d291e94, type: 2}
+  - {fileID: 4024576638288628840, guid: 6b1c0866fb02af045be6a0e935a4c34f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2628,7 +2628,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 2.5, y: 10}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 25, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2095610075
 GameObject:
