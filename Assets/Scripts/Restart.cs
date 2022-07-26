@@ -15,7 +15,7 @@ public class Restart : MonoBehaviour
     {
 
     }
-    public void RestartAll()
+    public static void RestartAll()
     {
         Debug.Log("Restarting grid");
         Playgrid.RestartGrid();
