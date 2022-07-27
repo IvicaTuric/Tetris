@@ -9,7 +9,7 @@ public class GameTitle : MonoBehaviour
     public static int lastRandomColor = 0;
     float prevTime;
     public static int numFalls = 0;
-    public static float fallTime = 1.2f;
+    public static float fallTime = 0.8f;
     [Header("Materials")]
     public Material[] materialList;
 

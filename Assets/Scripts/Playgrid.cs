@@ -18,6 +18,7 @@ public class Playgrid : MonoBehaviour
     public static AudioSource audioSource;
     public static float prevTime;
     public static float spawnTime = 4f;
+    public static bool gameOver = false;
 
     [Header("Blocks")]
     public GameObject[] blockList;
@@ -27,8 +28,9 @@ public class Playgrid : MonoBehaviour
     [Header("Materials")]
     public Material[] materialList;
 
-    [Header("Score")]
+    [Header("Text fields")]
     public GameObject scoreText;
+    public GameObject gameOverText;
 
     [Header("Audio")]
     public AudioClip failure;
@@ -52,8 +54,7 @@ public class Playgrid : MonoBehaviour
 
     void Update()
     {
-        // Spawn every 5s
-        if (Time.time - prevTime > spawnTime)
+        if (Time.time - prevTime > spawnTime && !gameOver)
         {
             prevTime = Time.time;
             Playgrid.instance.SpawnNewBlock();
@@ -195,10 +196,6 @@ public class Playgrid : MonoBehaviour
                 scoreBonus += 25;
                 switch (score)
                 {
-                    case > 1500:
-                        spawnTime = 1.5f;
-                        PlayBlock.fallTime = 0.3f;
-                        break;
                     case > 1200:
                         spawnTime = 2.0f;
                         PlayBlock.fallTime = 0.4f;
@@ -275,6 +272,13 @@ public class Playgrid : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void GameOver()
+    {
+        gameOver=true;
+        //Game over zvuk
+        gameOverText.transform.GetComponent<Renderer>().enabled=true;
     }
 
     void OnDrawGizmos()

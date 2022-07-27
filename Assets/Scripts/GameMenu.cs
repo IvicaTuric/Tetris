@@ -37,8 +37,7 @@ public class GameMenu : MonoBehaviour
     }
 
     public void exitButton(){
-        Debug.Log("EXITTTT");
-        UnityEditor.EditorApplication.isPlaying = false;
+        //UnityEditor.EditorApplication.isPlaying = false; // Comment when building app
         Application.Quit();
     }
 
@@ -49,11 +48,13 @@ public class GameMenu : MonoBehaviour
 
     public void restartButton(){
         //Save score to high score
-        Debug.Log("Restarting grid");
         Playgrid.RestartGrid();
         Playgrid.score = 0;
         Playgrid.instance.addScore(0);
         Playgrid.spawnTime = 4.0f;
         PlayBlock.fallTime = 0.8f;
+        Playgrid.instance.gameOverText.transform.GetComponent<Renderer>().enabled=false;
+        Playgrid.gameOver=false;
+        //Restart zvuk
     }
 }

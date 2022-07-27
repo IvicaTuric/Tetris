@@ -8,6 +8,7 @@ public class PlayBlock : MonoBehaviour
     float prevTime;
     public static float fallTime = 0.8f;
     bool grabbed = false;
+
     void Start()
     {
         MoveToValidPos();
@@ -51,10 +52,6 @@ public class PlayBlock : MonoBehaviour
             {
                 return false;
             }
-            else
-            {
-                return true;
-            }
         }
         return true;
     }
@@ -67,7 +64,8 @@ public class PlayBlock : MonoBehaviour
             Vector3 pos = Playgrid.instance.RoundPosition(child.position);
             if (pos.y >= Playgrid.instance.gridSizeY)
             {
-                //GAME OVER
+                Playgrid.instance.GameOver();
+                
             }
             if (!Playgrid.instance.CheckInsideGrid(pos))
             {
@@ -158,7 +156,7 @@ public class PlayBlock : MonoBehaviour
         Destroy(gameObject, 0.8f);
     }
 
-    IEnumerator Blink(Transform obj)
+    public static IEnumerator Blink(Transform obj)
     {
         Renderer objRenderer = obj.GetComponent<Renderer>();
         objRenderer.enabled = true;
